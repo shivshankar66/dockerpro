@@ -3,22 +3,22 @@ pipeline {
     environment {
         IMAGE_NAME = 'shivam193/hh:77'
         DOCKER_CREDENTIALS = credentials('docker_credential')
+        KUBECONFIG = 'D:\\Users\\DELL\\Desktop\\JENKINSFOLDER\\.kube\\config'
     }
     stages {
-        stage('checkout') {
+        stage('Checkout') {
             steps {
-                git branch: 'main',
-            url: 'https://github.com/shivshankar66/dockerpro.git'
+                checkout scm
             }
         }
-        stage('docker build & push') {
+        stage('Docker Build & Push') {
             steps {
                 bat 'echo %DOCKER_CREDENTIALS_PSW% | docker login -u %DOCKER_CREDENTIALS_USR% --password-stdin'
                 bat 'docker build -t %IMAGE_NAME% .'
                 bat 'docker push %IMAGE_NAME%'
             }
         }
-        stage('deploy') {
+        stage('Deploy to Kubernetes') {
             steps {
                 bat 'kubectl apply -f deployment.yml'
             }
