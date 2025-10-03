@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: Deploy
+ labels:
+  app: prodeploy
+spec:
+ replicas: 2
+ selector: 
+  matchLabels: 
+   app: prodeploy
+ template:
+  metadata:
+   labels: 
+    app: prodeploy
+ spec:
+  containers:
+  - name: prodeploy
+    image: shivam193/hh:77
+    ports:
+    - containerPort: 80
+
+
+---
+ 
+
+apiVersion: v1
+kind: Service
+metadata:
+ name: servicek8
+spec:
+ selector:
+  app: prodeploy
+ ports:
+ - protocol: tcp 
+   port: 80
+   targetPort: 80
+ type: LoadBalancer
